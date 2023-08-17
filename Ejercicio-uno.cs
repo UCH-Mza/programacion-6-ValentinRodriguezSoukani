@@ -1,4 +1,5 @@
-﻿/*using System;
+﻿/*
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -79,4 +80,12 @@ namespace HelloWorld
 
     }
 }
+*/
+
+/* para nuevos comentarios 
+
+git add .
+git commit -m "lo que cambio"
+git push
+
 */

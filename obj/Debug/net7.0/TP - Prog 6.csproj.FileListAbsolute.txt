@@ -1,0 +1,15 @@
+C:\Users\Cieguito\Desktop\TP - Prog 6\bin\Debug\net7.0\TP - Prog 6.exe
+C:\Users\Cieguito\Desktop\TP - Prog 6\bin\Debug\net7.0\TP - Prog 6.deps.json
+C:\Users\Cieguito\Desktop\TP - Prog 6\bin\Debug\net7.0\TP - Prog 6.runtimeconfig.json
+C:\Users\Cieguito\Desktop\TP - Prog 6\bin\Debug\net7.0\TP - Prog 6.dll
+C:\Users\Cieguito\Desktop\TP - Prog 6\bin\Debug\net7.0\TP - Prog 6.pdb
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.csproj.AssemblyReference.cache
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.AssemblyInfoInputs.cache
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.AssemblyInfo.cs
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.csproj.CoreCompileInputs.cache
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.dll
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\refint\TP - Prog 6.dll
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.pdb
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\TP - Prog 6.genruntimeconfig.cache
+C:\Users\Cieguito\Desktop\TP - Prog 6\obj\Debug\net7.0\ref\TP - Prog 6.dll

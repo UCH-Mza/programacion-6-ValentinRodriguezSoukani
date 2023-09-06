@@ -1,100 +1,79 @@
-/*
-using System;
-using System.Threading;
+
+/*using System;
 using System.Threading.Tasks;
 
-namespace ejercicio4
+namespace BarraDeEstadoConBarraCarga
 {
-    class Program
+    class ejercicio4
     {
+        static bool procesoCancelado = false;
+
+        struct Progreso
+        {
+            public int Porcentaje { get; set; }
+            public int BarLength { get; set; }
+            public int Line { get; set; }
+        }
+
         static async Task Main(string[] args)
         {
             Console.WriteLine("Iniciando proceso...");
 
-            // Crear un array de tareas para los 4 procesos
-            Task[] processTasks = new Task[4];
+            int numTareas = 4;
+            Console.WindowHeight = numTareas + 3;
 
-            // Iniciar los 4 procesos en paralelo
-            for (int i = 0; i < processTasks.Length; i++)
+            Task[] procesoTareas = new Task[numTareas];
+            Progreso[] progresos = new Progreso[numTareas];
+
+            for (int i = 0; i < numTareas; i++)
             {
-                processTasks[i] = MainProcessAsync(i + 1);
+                int taskId = i;
+                procesoTareas[i] = EjecutarProcesoAsync(taskId, progresos);
+                progresos[i].Line = i + 2;
             }
 
-            // Iniciar el hilo de la barra de progreso
-            Thread progressBarThread = new Thread(ProgressBarThread);
-            progressBarThread.Start();
+            Task barraCargaTarea = ActualizarBarraCargaAsync(procesoTareas, progresos);
 
-            // Esperar a que todas las tareas de proceso terminen
-            await Task.WhenAll(processTasks);
+            await Task.WhenAll(procesoTareas);
+            procesoCancelado = true;
+            await barraCargaTarea;
 
-            // Detener el hilo de la barra de progreso
-            progressBarThread.Join();
-
-            Console.WriteLine("\nProceso completado.");
+            Console.WriteLine("Proceso completado.");
         }
 
-        static async Task MainProcessAsync(int processNumber)
+        static async Task EjecutarProcesoAsync(int taskId, Progreso[] progresos)
         {
-            for (int i = 0; i <= 100; i++)
+            for (int i = 0; i <= 11; i++) // Cambia el bucle para que llegue al 100%
             {
-                // Simular una tarea que lleva tiempo
-                await Task.Delay(100);
+                await Task.Delay(1000);
 
-                // Informar sobre el progreso del proceso
-                ReportProgress(processNumber, i);
-            }
-        }
-
-        static void ProgressBarThread()
-        {
-            while (true)
-            {
-                // Imprimir la barra de progreso general
-                Console.Write("[");
-
-                int overallProgress = CalculateOverallProgress();
-
-                for (int i = 0; i <= 40; i++)
+                if (procesoCancelado)
                 {
-                    if (i <= overallProgress / 10)
-                    {
-                        Console.Write("=");
-                    }
-                    else
-                    {
-                        Console.Write(" ");
-                    }
+                    Console.WriteLine($"Proceso {taskId + 1} cancelado.");
+                    return;
                 }
 
-                Console.Write($"] {overallProgress}%");
+                progresos[taskId].Porcentaje = i * 10; // Ajusta el cálculo para llegar al 100%
+            }
+        }
 
-                if (overallProgress >= 400) // 4 procesos * 100%
+        static async Task ActualizarBarraCargaAsync(Task[] procesoTareas, Progreso[] progresos)
+        {
+            int barLength = 100; // Cambia la longitud de la barra de carga a 100
+
+            Console.WriteLine("Progreso:");
+
+            while (!procesoTareas.All(t => t.IsCompleted))
+            {
+                for (int i = 0; i < procesoTareas.Length; i++)
                 {
-                    break;
+                    Console.SetCursorPosition(0, progresos[i].Line);
+                    Console.Write($"Tarea {i + 1}: |{new string('#', progresos[i].Porcentaje / (100 / barLength)).PadRight(barLength)}| {progresos[i].Porcentaje}%");
                 }
 
-                // Limpiar la línea actual en la consola y volver al principio
-                Console.SetCursorPosition(0, Console.CursorTop);
+                await Task.Delay(1000);
             }
-        }
-
-        static int[] CurrentProgress = new int[4];
-
-        static void ReportProgress(int processNumber, int progress)
-        {
-            // Actualizar el progreso actual del proceso específico de forma segura
-            Interlocked.Exchange(ref CurrentProgress[processNumber - 1], progress);
-        }
-
-        static int CalculateOverallProgress()
-        {
-            // Calcular el progreso general de los 4 procesos
-            int overallProgress = 0;
-            foreach (int progress in CurrentProgress)
-            {
-                overallProgress += progress;
-            }
-            return overallProgress;
+            Console.WriteLine();
         }
     }
 }

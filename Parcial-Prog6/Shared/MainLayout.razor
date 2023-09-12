@@ -1,0 +1,38 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Parcial-Prog6</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+       
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+
+        <!-- Define un elemento de lista de navegación con un relleno de 3 píxeles -->
+        <li class="nav-item px-3">
+
+            <!-- Define un enlace de navegación utilizando Blazor NavLink que llevará a la ruta "progress" -->
+            <NavLink class="nav-link" href="progress">
+
+                <!-- Muestra un ícono usando la clase CSS "oi oi-list-rich" (puede ser una fuente de iconos) -->
+                <span class="oi oi-list-rich" aria-hidden="true"></span>
+
+                <!-- Muestra el texto "Progreso" que representa el nombre de la página o destino del enlace -->
+                Progreso
+
+            </NavLink> <!-- Cierra el enlace de navegación -->
+
+        </li> <!-- Cierra el elemento de lista de navegación -->
+
+
+    </main>
+</div>

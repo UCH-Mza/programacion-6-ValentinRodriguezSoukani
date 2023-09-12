@@ -1,0 +1,75 @@
+﻿@page "/progress" // Ruta de la página
+
+<h3>Barra de Progreso</h3>
+
+@foreach (var taskProgress in taskProgressList) // Inicio de un bucle para recorrer taskProgressList
+{
+    <div class="progress-container">
+        <div class="progress-bar" style="width: @taskProgress.ProgressPercentage%">
+            <!-- Crea una barra de progreso con una anchura dinámica basada en ProgressPercentage -->
+            @taskProgress.ProgressPercentage% <!-- Muestra el porcentaje de progreso dentro de la barra -->
+        </div>
+    </div>
+    <button class="btn btn-primary" disabled="@taskProgress.IsInProgress" @onclick="() => StartProgress(taskProgress)">Iniciar Tarea @taskProgress.TaskNumber</button> <!-- Crea un botón para iniciar una tarea individual -->
+}
+
+<br />
+<button class="btn btn-success" @onclick="StartAllTasks" disabled="@taskProgressList.Any(t => t.IsInProgress)">Iniciar Todas las Tareas</button> <!-- Crea un botón para iniciar todas las tareas -->
+
+@code {
+    private class TaskProgress // Definición de una clase interna para representar el progreso de una tarea
+    {
+        public int TaskNumber { get; set; } // Número de tarea
+        public int ProgressPercentage { get; set; } // Porcentaje de progreso de la tarea
+        public bool IsInProgress { get; set; } // Indica si la tarea está en progreso o no
+    }
+
+    private List<TaskProgress> taskProgressList = new List<TaskProgress>(); // Lista que almacena el progreso de todas las tareas
+
+    private async Task StartProgress(TaskProgress taskProgress) // Método para iniciar una tarea individual
+    {
+        taskProgress.IsInProgress = true; // Marca la tarea como en progreso
+
+        var progress = new Progress<int>(value =>
+        {
+            taskProgress.ProgressPercentage = value; // Actualiza el progreso de la tarea
+            StateHasChanged(); // Notifica a Blazor para que actualice la interfaz de usuario
+        });
+
+        await Task.Run(() => SimulateProgress(progress)); // Simula el progreso de la tarea en segundo plano
+
+        taskProgress.IsInProgress = false; // Marca la tarea como completada al finalizar
+    }
+
+    private void SimulateProgress(IProgress<int> progress) // Método para simular el progreso de la tarea
+    {
+        for (int i = 0; i <= 100; i++)
+        {
+            progress.Report(i); // Informa sobre el progreso actual a través del objeto Progress
+            Thread.Sleep(100); // Simula una pausa de 100 ms para simular el trabajo en segundo plano
+        }
+    }
+
+    private async Task StartAllTasks() // Método para iniciar todas las tareas
+    {
+        var tasks = new List<Task>();
+
+        foreach (var taskProgress in taskProgressList)
+        {
+            if (!taskProgress.IsInProgress)
+            {
+                tasks.Add(StartProgress(taskProgress)); // Inicia cada tarea individual y la agrega a la lista de tareas
+            }
+        }
+
+        await Task.WhenAll(tasks); // Espera a que todas las tareas se completen antes de continuar
+    }
+
+    protected override void OnInitialized() // Método que se ejecuta al inicializar el componente
+    {
+        for (int i = 1; i <= 5; i++)
+        {
+            taskProgressList.Add(new TaskProgress { TaskNumber = i, ProgressPercentage = 0, IsInProgress = false }); // Inicializa la lista de progreso de tareas con valores iniciales
+        }
+    }
+}
